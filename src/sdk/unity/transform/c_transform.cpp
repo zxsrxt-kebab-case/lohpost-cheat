@@ -32,3 +32,11 @@ vec3_t c_transform::get_up( )
     static vec3_t up = { 0, 1, 0 };
     return get_rotation( ) * up;
 }
+void c_transform::set_position(vec3_t position)
+{
+    reinterpret_cast< void( * )( c_transform*, vec3_t* ) >( il2cpp_icall::resolve( "UnityEngine.Transform::set_position_Injected" ) )( this, &position );
+}
+void c_transform::set_rotation( vec4_t rotation )
+{
+    reinterpret_cast< void( * )( c_transform*, vec4_t* ) >( il2cpp_icall::resolve( "UnityEngine.Transform::set_rotation_Injected" ) )( this, &rotation );
+}

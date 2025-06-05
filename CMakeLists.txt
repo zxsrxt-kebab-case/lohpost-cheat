@@ -12,6 +12,7 @@ endif()
 
 
 file(GLOB_RECURSE ALL_SOURCES
+        "main.cpp"
         "src/*.cpp"
         "src/*.c"
         "deps/*.cpp"

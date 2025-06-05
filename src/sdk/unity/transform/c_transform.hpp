@@ -16,6 +16,8 @@ public:
     vec3_t get_forward( );
     vec3_t get_right( );
     vec3_t get_up( );
+    void set_position(vec3_t position);
+    void set_rotation( vec4_t rotation );
 };
 
 

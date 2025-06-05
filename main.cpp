@@ -8,6 +8,7 @@
 #include "deps/minhook/mh.h"
 #include "src/hooks/dx_hook/dx_hook.hpp"
 #include <vector>
+#include "src/gui/gui.hpp"
 
 void CreateConsole() {
     AllocConsole();
@@ -16,8 +17,7 @@ void CreateConsole() {
     freopen_s(&fp, "CONIN$", "r", stdin);
 }
 
-#include "src/sdk/game/newcharactercontroller.hpp"
-#include "src/sdk/unity/camera/c_camera.hpp"
+
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam );
 
@@ -51,7 +51,7 @@ LRESULT __stdcall WndProc( const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     return CallWindowProc( oWndProc, hWnd, uMsg, wParam, lParam );
 }
 
-std::vector<new_character_controller*> players;
+
 
 HRESULT __stdcall hkPresent( IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags )
 {
@@ -77,30 +77,12 @@ HRESULT __stdcall hkPresent( IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT
             return oPresent( pSwapChain, SyncInterval, Flags );
     }
 
+
     ImGui_ImplDX11_NewFrame( );
     ImGui_ImplWin32_NewFrame( );
     ImGui::NewFrame( );
 
-    ImGui::Begin("pisun");
-    ImGui::Text("%d", players.size( ) );
-
-
-    ImGui::End();
-
-    auto camera = c_camera::get_main();
-    auto draw = ImGui::GetBackgroundDrawList();
-    for (auto player : players)
-    {
-        if (!player) continue;
-
-        auto pos = player->get_transform()->get_position();
-        auto ws = camera->w2s(pos);
-        if (!ws.checker) continue;
-
-        draw->AddLine({1920 / 2, 0}, ws.pos, ImColor(255, 255, 255));
-    }
-
-    players.clear( );
+    gui::run();
 
     ImGui::Render( );
 
@@ -109,19 +91,8 @@ HRESULT __stdcall hkPresent( IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT
     return oPresent( pSwapChain, SyncInterval, Flags );
 }
 
-#include "src/sdk/il2cpp/il2cpp.hpp"
 
 
-
-void (*o_player_update)(new_character_controller* controller);
-void player_update(new_character_controller* controller)
-{
-    if (std::ranges::find(players, controller) == players.end())
-    {
-        players.push_back(controller);
-    }
-    o_player_update(controller);
-}
 
 DWORD WINAPI MainThread( LPVOID lpReserved )
 {
@@ -134,8 +105,7 @@ DWORD WINAPI MainThread( LPVOID lpReserved )
 
             MH_EnableHook( MH_ALL_HOOKS );
 
-            il2cpp_assembly::open("Assembly-CSharp")->image()->get_class("Source.Game.Client.Movement", "NewClientCharacterController")->
-            get_method("Update", 0)->hook<&player_update>(&o_player_update);
+            gui::single();
 
             init_hook = true;
         }
