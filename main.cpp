@@ -17,6 +17,7 @@ void CreateConsole() {
 }
 
 #include "src/sdk/game/newcharactercontroller.hpp"
+#include "src/sdk/unity/camera/c_camera.hpp"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam );
 
@@ -84,8 +85,22 @@ HRESULT __stdcall hkPresent( IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT
     ImGui::Text("%d", players.size( ) );
 
 
-
     ImGui::End();
+
+    auto camera = c_camera::get_main();
+    auto draw = ImGui::GetBackgroundDrawList();
+    for (auto player : players)
+    {
+        if (!player) continue;
+
+        auto pos = player->get_transform()->get_position();
+        auto ws = camera->w2s(pos);
+        if (!ws.checker) continue;
+
+        draw->AddLine({1920 / 2, 0}, ws.pos, ImColor(255, 255, 255));
+    }
+
+    players.clear( );
 
     ImGui::Render( );
 

@@ -11,7 +11,13 @@ if(MINGW)
 endif()
 
 
-file(GLOB_RECURSE ALL_SOURCES "*.cpp" "*.c")
+file(GLOB_RECURSE ALL_SOURCES
+        "src/*.cpp"
+        "src/*.c"
+        "deps/*.cpp"
+        "deps/*.c"
+)
+
 list(FILTER ALL_SOURCES EXCLUDE REGEX ".*CMakeFiles.*")
 list(FILTER ALL_SOURCES EXCLUDE REGEX ".*cmake-build-.*")
 

@@ -1,9 +1,8 @@
 //
 // Created by zxsrxt on 05.06.2025.
 //
+#pragma once
 
-#ifndef COMMON_HPP
-#define COMMON_HPP
 
 #include <vector>
 #include <string>
@@ -14,5 +13,3 @@
 
 #define IAPI(str) GetProcAddress( GetModuleHandle( "GameAssembly.dll" ), str )
 
-
-#endif //COMMON_HPP

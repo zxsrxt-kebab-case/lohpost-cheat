@@ -6,7 +6,12 @@
 
 c_camera *c_camera::get_main()
 {
-    return reinterpret_cast<c_camera *(*)()>(il2cpp_icall::resolve("UnityEngine.Camera::get_main"));
+    return reinterpret_cast<c_camera *(*)()>(il2cpp_icall::resolve("UnityEngine.Camera::get_main"))();
+}
+
+inline float dot(const vec3_t &Vec1, const vec3_t &Vec2)
+{
+    return Vec1.x * Vec2.x + Vec1.y * Vec2.y + Vec1.z * Vec2.z;
 }
 
 c_camera::w2s_ret c_camera::w2s(vec3_t pos)
