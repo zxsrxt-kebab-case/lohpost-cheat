@@ -7,6 +7,7 @@
 #include "deps/imgui/impl/imgui_impl_win32.h"
 #include "deps/minhook/mh.h"
 #include "src/hooks/dx_hook/dx_hook.hpp"
+#include <vector>
 
 void CreateConsole() {
     AllocConsole();
@@ -14,6 +15,9 @@ void CreateConsole() {
     freopen_s(&fp, "CONOUT$", "w", stdout);
     freopen_s(&fp, "CONIN$", "r", stdin);
 }
+
+#include "src/sdk/game/newcharactercontroller.hpp"
+
 extern LRESULT ImGui_ImplWin32_WndProcHandler( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam );
 
 typedef HRESULT( __stdcall* Present ) ( IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags );
@@ -46,6 +50,8 @@ LRESULT __stdcall WndProc( const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     return CallWindowProc( oWndProc, hWnd, uMsg, wParam, lParam );
 }
 
+std::vector<new_character_controller*> players;
+
 HRESULT __stdcall hkPresent( IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags )
 {
     static bool init = false;
@@ -75,7 +81,7 @@ HRESULT __stdcall hkPresent( IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT
     ImGui::NewFrame( );
 
     ImGui::Begin("pisun");
-    ImGui::Text("Hello World");
+    ImGui::Text("%d", players.size( ) );
 
 
 
@@ -88,6 +94,20 @@ HRESULT __stdcall hkPresent( IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT
     return oPresent( pSwapChain, SyncInterval, Flags );
 }
 
+#include "src/sdk/il2cpp/il2cpp.hpp"
+
+
+
+void (*o_player_update)(new_character_controller* controller);
+void player_update(new_character_controller* controller)
+{
+    if (std::ranges::find(players, controller) == players.end())
+    {
+        players.push_back(controller);
+    }
+    o_player_update(controller);
+}
+
 DWORD WINAPI MainThread( LPVOID lpReserved )
 {
     bool init_hook = false;
@@ -98,6 +118,10 @@ DWORD WINAPI MainThread( LPVOID lpReserved )
             dx_hook::hook( 8, ( void** ) &oPresent, (void*) hkPresent );
 
             MH_EnableHook( MH_ALL_HOOKS );
+
+            il2cpp_assembly::open("Assembly-CSharp")->image()->get_class("Source.Game.Client.Movement", "NewClientCharacterController")->
+            get_method("Update", 0)->hook<&player_update>(&o_player_update);
+
             init_hook = true;
         }
     } while ( !init_hook );
