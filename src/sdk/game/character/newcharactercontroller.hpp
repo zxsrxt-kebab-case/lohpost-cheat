@@ -5,9 +5,9 @@
 #ifndef NEWCHARACTERCONTROLLER_HPP
 #define NEWCHARACTERCONTROLLER_HPP
 
-#include "../unity/component/c_component.hpp"
+#include "../network/nbehaviour.hpp"
 
-class new_character_controller : public c_component
+class new_character_controller : public n_behaviour
 {
 
 };
