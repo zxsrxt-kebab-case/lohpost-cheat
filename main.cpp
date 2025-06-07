@@ -9,6 +9,7 @@
 #include "src/hooks/dx_hook/dx_hook.hpp"
 #include <vector>
 #include "src/gui/gui.hpp"
+#include "src/hooks/player_hook/playerhook.hpp"
 
 void CreateConsole() {
     AllocConsole();
@@ -105,7 +106,7 @@ DWORD WINAPI MainThread( LPVOID lpReserved )
 
             MH_EnableHook( MH_ALL_HOOKS );
 
-            gui::single();
+            player_hook::hook();
 
             init_hook = true;
         }

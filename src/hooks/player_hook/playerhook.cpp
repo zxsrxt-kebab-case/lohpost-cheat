@@ -8,6 +8,9 @@
 
 #include "../../sdk/game/character/newcharactercontroller.hpp"
 #include "../../ent_system/entsystem.hpp"
+#include "../../event/impl/player_tick_event.hpp"
+#include "../../managers/eventmanager.hpp"
+#include "../../managers/modulemanager.hpp"
 #include "../../sdk/il2cpp/il2cpp.hpp"
 #include "../../variables/variables.hpp"
 
@@ -25,6 +28,9 @@ void player_update(new_character_controller* controller)
         {
             ent->m_controller = controller;
         }
+
+        auto event = player_tick_event(std::string("player_tick"), controller);
+        event_manager::get()->on_event(event);
     }
     o_player_update(controller);
 }

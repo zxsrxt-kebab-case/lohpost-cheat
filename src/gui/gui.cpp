@@ -4,11 +4,12 @@
 
 #include "gui.hpp"
 
-#include "../sdk/unity/camera/c_camera.hpp"
 #include "../../deps/imgui/imgui.h"
 #include "../sdk/il2cpp/il2cpp.hpp"
 #include "../variables/variables.hpp"
 #include "../ent_system/entsystem.hpp"
+#include "../event/impl/render_event.hpp"
+#include "../managers/eventmanager.hpp"
 
 namespace gui
 {
@@ -38,6 +39,9 @@ namespace gui
         }
 
         players.clear( );*/
+
+        auto event = render_event("render_event");
+        event_manager::get()->on_event(event);
     }
 
 
