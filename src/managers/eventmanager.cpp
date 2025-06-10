@@ -4,6 +4,8 @@
 
 #include "eventmanager.hpp"
 
+#include <ranges>
+
 #include "modulemanager.hpp"
 
 #include "../event/impl/player_tick_event.hpp"
@@ -32,20 +34,20 @@ void event_manager::on_event(event_t& event)
             m_callbacks.erase(it);
     }
 
-    for (auto& module : module_manager::get()->m_modules)
+    for (auto &val: module_manager::get()->m_modules | std::views::values)
     {
-        if (!module.second->is_enabled())
+        if (!val->is_enabled())
             continue;
 
-        module.second->on_event(event);
+        val->on_event(event);
 
         if (auto player_tick = dynamic_cast<player_tick_event*>(&event))
         {
-            module.second->on_tick();
+            val->on_tick();
         }
         if (auto player_tick = dynamic_cast<render_event*>(&event))
         {
-            module.second->on_render();
+            val->on_render();
         }
     }
 }

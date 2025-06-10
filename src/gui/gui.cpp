@@ -5,7 +5,6 @@
 #include "gui.hpp"
 
 #include <imgui.h>
-#include "../sdk/il2cpp/il2cpp.hpp"
 #include "../variables/variables.hpp"
 #include "../ent_system/entsystem.hpp"
 #include "../event/impl/render_event.hpp"
@@ -20,8 +19,8 @@ namespace gui
         ImGui::Begin("pisun");
         ImGui::Text("%d players", ent_system::get()->m_controllers.size( ) );
 
-        for (auto& module : module_manager::get()->m_modules)
-            ImGui::Checkbox(module.first.c_str(), &module.second->enabled);
+        for (auto&[fst, snd] : module_manager::get()->m_modules)
+            ImGui::Checkbox(fst.c_str(), &snd->enabled);
 
         ImGui::End();
 

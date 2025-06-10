@@ -21,7 +21,8 @@ void player_update(new_character_controller* controller)
     if (module_manager::get()->m_modules["esp"]->is_enabled())
     {
         static auto& ent = ent_system::get();
-        if (auto& players = ent->m_controllers; std::ranges::find(players, controller) == players.end())
+        if (auto& players = ent->m_controllers;
+            std::ranges::find(players, controller) == players.end() && !controller->identity()->is_local())
         {
             players.push_back(controller);
         }
@@ -40,5 +41,4 @@ void player_hook::hook()
 {
     il2cpp_assembly::open("Assembly-CSharp")->image()->get_class("Source.Game.Client.Movement", "NewClientCharacterController")->
     get_method("Update", 0)->hook<&player_update>(&o_player_update);
-    std::cout << "hooked" << std::endl;
 }
