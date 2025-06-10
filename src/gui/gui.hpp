@@ -8,7 +8,6 @@
 namespace gui
 {
     extern void run();
-    extern void single();
 }
 
 #endif //GUI_HPP

@@ -14,7 +14,6 @@
 
 namespace gui
 {
-
     void run()
     {
         static auto& vars = variables::get();
@@ -29,22 +28,4 @@ namespace gui
         auto event = render_event("render_event");
         event_manager::get()->on_event(event);
     }
-
-
-    void (*o_shot_update)(c_component* controller);
-    void shot_update(c_component* controller)
-    {
-        controller->get_transform()->set_position({0, 0, 0});
-        o_shot_update(controller);
-    }
-
-    void single()
-    {
-        il2cpp_assembly::open("Assembly-CSharp")->image()->get_class("Source.Game.Abstract.Ballistics.Projectiles", "MovingProjectile")->
-        get_method("Update", 0)->hook<&shot_update>(&o_shot_update);
-    }
-
-
-
-
 }
