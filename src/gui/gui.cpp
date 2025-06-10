@@ -20,8 +20,8 @@ namespace gui
         ImGui::Begin("pisun");
         ImGui::Text("%d players", ent_system::get()->m_controllers.size( ) );
 
-        for (auto& module : module_manager::get()->modules)
-            ImGui::Checkbox(module->get_name().c_str(), &module->enabled);
+        for (auto& module : module_manager::get()->m_modules)
+            ImGui::Checkbox(module.first.c_str(), &module.second->enabled);
 
         ImGui::End();
 

@@ -4,10 +4,7 @@ project(cheat)
 set(CMAKE_COMPILER_ID_TESTS OFF)
 set(CMAKE_CXX_STANDARD 26)
 
-if(MSVC)
-    add_compile_options(/W4 /WX)
-    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-elseif(MINGW)
+if(MINGW)
     set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")
     set(CMAKE_SHARED_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")
 endif()
@@ -81,10 +78,5 @@ if(MINGW)
             -lstdc++
             -lgcc
             -Wl,--no-whole-archive
-    )
-elseif(MSVC)
-    target_compile_definitions(cheat PRIVATE
-            _CRT_SECURE_NO_WARNINGS
-            NOMINMAX
     )
 endif()

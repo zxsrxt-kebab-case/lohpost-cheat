@@ -22,31 +22,30 @@ void event_manager::remove_callback(const event_callback &callback)
 
 void event_manager::on_event(event_t& event)
 {
-    std::vector<event_callback> to_remove;
-    for (auto callback : m_callbacks)
+    for (auto it = m_callbacks.begin(); it != m_callbacks.end(); ++it)
     {
+        auto callback = *it;
+
         callback.m_callback(event);
 
         if (callback.m_type == event_callback::event_type_e::once)
-            to_remove.push_back(callback);
+            m_callbacks.erase(it);
     }
-    for (auto& removal : to_remove)
-        remove_callback(removal);
 
-    for (auto& module : module_manager::get()->modules)
+    for (auto& module : module_manager::get()->m_modules)
     {
-        if (!module->is_enabled())
+        if (!module.second->is_enabled())
             continue;
 
-        module->on_event(event);
+        module.second->on_event(event);
 
         if (auto player_tick = dynamic_cast<player_tick_event*>(&event))
         {
-            module->on_tick();
+            module.second->on_tick();
         }
         if (auto player_tick = dynamic_cast<render_event*>(&event))
         {
-            module->on_render();
+            module.second->on_render();
         }
     }
 }

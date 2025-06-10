@@ -5,7 +5,7 @@
 #ifndef MODULEMANAGER_HPP
 #define MODULEMANAGER_HPP
 
-#include <vector>
+#include <unordered_map>
 #include <memory>
 
 #include "../modules/module_t.hpp"
@@ -15,8 +15,7 @@
 class module_manager : public singleton<module_manager>
 {
 public:
-    std::vector<std::unique_ptr<module_t>> modules;
-
+    std::unordered_map<std::string, std::unique_ptr<module_t>> m_modules;
     void initialize();
 };
 

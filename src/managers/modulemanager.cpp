@@ -7,5 +7,5 @@
 
 void module_manager::initialize()
 {
-    modules.push_back(std::make_unique<esp_module>("esp"));
+    m_modules["esp"] = std::make_unique<esp_module>("esp");
 }

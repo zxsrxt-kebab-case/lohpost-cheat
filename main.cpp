@@ -99,7 +99,6 @@ HRESULT __stdcall hkPresent( IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT
 
 DWORD WINAPI MainThread( LPVOID lpReserved )
 {
-    bool init_hook = false;
     do
     {
         if ( dx_hook::init( ) == dx_hook::status::done )
@@ -108,14 +107,12 @@ DWORD WINAPI MainThread( LPVOID lpReserved )
 
             MH_EnableHook( MH_ALL_HOOKS );
 
-            event_manager::get()->add_callback(event_callback(event_callback::event_type_e::once, [](event_t & event)
-            {
-                module_manager::get()->initialize();
-                player_hook::hook();
-            }));
-            init_hook = true;
+            module_manager::get()->initialize();
+            player_hook::hook();
+
+            break;
         }
-    } while ( !init_hook );
+    } while ( true );
     return TRUE;
 }
 
