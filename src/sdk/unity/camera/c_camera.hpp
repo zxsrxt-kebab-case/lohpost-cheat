@@ -9,7 +9,7 @@
 #include "../structs/vec3.hpp"
 #include "../common.hpp"
 
-#include "../../../../deps/imgui/imgui.h"
+#include <imgui.h>
 
 
 class c_camera : public c_component

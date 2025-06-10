@@ -6,6 +6,7 @@
 #define MODULEMANAGER_HPP
 
 #include <vector>
+#include <memory>
 
 #include "../modules/module_t.hpp"
 #include "../singleton/singleton.hpp"
@@ -14,7 +15,7 @@
 class module_manager : public singleton<module_manager>
 {
 public:
-    std::vector<module_t> modules;
+    std::vector<std::unique_ptr<module_t>> modules;
 
     void initialize();
 };

@@ -11,10 +11,10 @@
 
 class module_t : public i_module
 {
-private:
+public:
     std::string name;
     bool enabled;
-public:
+
     explicit module_t(std::string name) : name(name), enabled(false) {}
 
     bool is_enabled() const { return enabled; }
@@ -27,6 +27,7 @@ public:
         else
             on_disable();
     }
+    std::string get_name() const { return name; }
 };
 
 

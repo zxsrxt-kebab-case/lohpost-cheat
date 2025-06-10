@@ -7,6 +7,5 @@
 
 void module_manager::initialize()
 {
-    /*auto module = new esp_module("esp");
-    modules.push_back();*/
+    modules.push_back(std::make_unique<esp_module>("esp"));
 }

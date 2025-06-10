@@ -7,10 +7,20 @@
 
 #include "../module_t.hpp"
 
-class esp_module : module_t
+class esp_module : public module_t
 {
 public:
     void on_render() override;
+
+    void on_event(event_t& event) override {}
+    void on_tick() override {}
+    void on_enable() override {}
+    void on_disable() override {}
+
+    esp_module(std::string name) : module_t(name)
+    {
+
+    }
 };
 
 

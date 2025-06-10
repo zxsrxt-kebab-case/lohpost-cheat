@@ -5,7 +5,7 @@
 #ifndef RENDER_EVENT_HPP
 #define RENDER_EVENT_HPP
 #include "../event_t.hpp"
-#include "../../../deps/imgui/imgui.h"
+#include <imgui.h>
 
 class render_event : public event_t
 {

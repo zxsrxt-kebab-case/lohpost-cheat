@@ -3,7 +3,7 @@
 #include <assert.h>
 #include <cstdint>
 
-#include "../../../deps/minhook/mh.h"
+#include <MinHook.h>
 
 #include <d3d11.h>
 #include <dxgi.h>

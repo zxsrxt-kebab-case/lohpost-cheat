@@ -4,12 +4,13 @@
 
 #include "gui.hpp"
 
-#include "../../deps/imgui/imgui.h"
+#include <imgui.h>
 #include "../sdk/il2cpp/il2cpp.hpp"
 #include "../variables/variables.hpp"
 #include "../ent_system/entsystem.hpp"
 #include "../event/impl/render_event.hpp"
 #include "../managers/eventmanager.hpp"
+#include "../managers/modulemanager.hpp"
 
 namespace gui
 {
@@ -19,26 +20,11 @@ namespace gui
         static auto& vars = variables::get();
         ImGui::Begin("pisun");
         ImGui::Text("%d players", ent_system::get()->m_controllers.size( ) );
-        ImGui::Checkbox("esp enable", &vars->esp_enabled);
+
+        for (auto& module : module_manager::get()->modules)
+            ImGui::Checkbox(module->get_name().c_str(), &module->enabled);
 
         ImGui::End();
-        /*if (enabledsss)
-        {
-            auto camera = c_camera::get_main();
-            auto draw = ImGui::GetBackgroundDrawList();
-            for (auto player : players)
-            {
-                if (!player) continue;
-
-                auto pos = player->get_transform()->get_position();
-                auto ws = camera->w2s(pos);
-                if (!ws.checker) continue;
-
-                draw->AddLine({1920 / 2, 0}, ws.pos, ImColor(255, 255, 255));
-            }
-        }
-
-        players.clear( );*/
 
         auto event = render_event("render_event");
         event_manager::get()->on_event(event);

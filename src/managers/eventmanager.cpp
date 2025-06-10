@@ -35,18 +35,18 @@ void event_manager::on_event(event_t& event)
 
     for (auto& module : module_manager::get()->modules)
     {
-        if (!module.is_enabled())
+        if (!module->is_enabled())
             continue;
 
-        module.on_event(event);
+        module->on_event(event);
 
         if (auto player_tick = dynamic_cast<player_tick_event*>(&event))
         {
-            module.on_tick();
+            module->on_tick();
         }
         if (auto player_tick = dynamic_cast<render_event*>(&event))
         {
-            module.on_render();
+            module->on_render();
         }
     }
 }

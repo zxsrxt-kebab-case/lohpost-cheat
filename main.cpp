@@ -2,14 +2,16 @@
 #include <dxgi.h>
 #include <iostream>
 #include <Windows.h>
-#include "deps/imgui/imgui.h"
-#include "deps/imgui/impl/imgui_impl_dx11.h"
-#include "deps/imgui/impl/imgui_impl_win32.h"
-#include "deps/minhook/mh.h"
+#include <imgui.h>
+#include <imgui_impl_dx11.h>
+#include <imgui_impl_win32.h>
+#include <MinHook.h>
 #include "src/hooks/dx_hook/dx_hook.hpp"
 #include <vector>
 #include "src/gui/gui.hpp"
 #include "src/hooks/player_hook/playerhook.hpp"
+#include "src/managers/eventmanager.hpp"
+#include "src/managers/modulemanager.hpp"
 
 void CreateConsole() {
     AllocConsole();
@@ -106,8 +108,11 @@ DWORD WINAPI MainThread( LPVOID lpReserved )
 
             MH_EnableHook( MH_ALL_HOOKS );
 
-            player_hook::hook();
-
+            event_manager::get()->add_callback(event_callback(event_callback::event_type_e::once, [](event_t & event)
+            {
+                module_manager::get()->initialize();
+                player_hook::hook();
+            }));
             init_hook = true;
         }
     } while ( !init_hook );
