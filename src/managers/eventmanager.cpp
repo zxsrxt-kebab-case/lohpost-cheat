@@ -34,7 +34,7 @@ void event_manager::on_event(event_t& event)
             m_callbacks.erase(it);
     }
 
-    for (auto &val: module_manager::get()->m_modules | std::views::values)
+    for (const auto &val: module_manager::get()->m_modules | std::views::values)
     {
         if (!val->is_enabled())
             continue;
