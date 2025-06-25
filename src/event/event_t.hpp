@@ -17,7 +17,9 @@ public:
     virtual ~event_t() = default;
 
     void set_cancel(const bool c) { m_is_cancel = c; }
-    bool get_cancel() const { return m_is_cancel; }
+    [[nodiscard]] bool get_cancel() const { return m_is_cancel; }
+
+    [[nodiscard]] std::string get_name() const { return m_name; }
 };
 
 

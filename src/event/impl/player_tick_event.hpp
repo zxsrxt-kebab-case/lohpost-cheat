@@ -7,14 +7,13 @@
 #include <string>
 
 #include "../event_t.hpp"
-#include "../../sdk/game/character/newcharactercontroller.hpp"
+#include "../../sdk/game/player_data/player_data.hpp"
 
 class player_tick_event : public event_t
 {
 public:
-    new_character_controller* m_controller;
 
-    explicit player_tick_event(const std::string &name, new_character_controller* player) : event_t(name), m_controller(player)
+    explicit player_tick_event(const std::string &name) : event_t(name)
     {}
 };
 

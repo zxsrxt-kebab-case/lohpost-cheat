@@ -1,4 +1,4 @@
-# lohpost legacy cheat
+# lohpost mobile cheat
 
 ---
 

@@ -7,9 +7,10 @@
 #include <ranges>
 
 #include "modulemanager.hpp"
+#include "../event/impl/on_menu_event.hpp"
 
 #include "../event/impl/player_tick_event.hpp"
-#include "../event/impl/render_event.hpp"
+#include "../event/impl/on_render_event.hpp"
 
 void event_manager::add_callback(const event_callback &callback)
 {
@@ -26,7 +27,7 @@ void event_manager::on_event(event_t& event)
 {
     for (auto it = m_callbacks.begin(); it != m_callbacks.end(); ++it)
     {
-        auto callback = *it;
+        const auto& callback = *it;
 
         callback.m_callback(event);
 
@@ -34,20 +35,27 @@ void event_manager::on_event(event_t& event)
             m_callbacks.erase(it);
     }
 
-    for (const auto &val: module_manager::get()->m_modules | std::views::values)
+    for (const auto &module: module_manager::get()->get_modules() | std::views::values)
     {
-        if (!val->is_enabled())
+        if (!module->is_enabled())
             continue;
 
-        val->on_event(event);
+        if (event.get_cancel())
+            continue;
+
+        module->on_event(event);
 
         if (auto player_tick = dynamic_cast<player_tick_event*>(&event))
         {
-            val->on_tick();
+            module->on_tick();
         }
-        if (auto player_tick = dynamic_cast<render_event*>(&event))
+        if (auto render_event = dynamic_cast<on_render_event*>(&event))
         {
-            val->on_render();
+            module->on_render();
+        }
+        if (auto menu_event = dynamic_cast<on_menu_event*>(&event))
+        {
+            module->on_menu();
         }
     }
 }

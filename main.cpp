@@ -9,8 +9,7 @@
 #include "src/hooks/dx_hook/dx_hook.hpp"
 #include <vector>
 #include "src/gui/gui.hpp"
-#include "src/hooks/player_hook/playerhook.hpp"
-#include "src/managers/eventmanager.hpp"
+#include "src/managers/hookmanager.hpp"
 #include "src/managers/modulemanager.hpp"
 
 void CreateConsole() {
@@ -104,11 +103,12 @@ DWORD WINAPI MainThread( LPVOID lpReserved )
         if ( dx_hook::init( ) == dx_hook::status::done )
         {
             dx_hook::hook( 8, ( void** ) &oPresent, (void*) hkPresent );
+            hook_manager::get()->initialize();
+            hook_manager::get()->hook( );
 
             MH_EnableHook( MH_ALL_HOOKS );
 
             module_manager::get()->initialize();
-            player_hook::hook();
 
             break;
         }

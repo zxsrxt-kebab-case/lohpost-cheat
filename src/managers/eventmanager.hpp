@@ -36,7 +36,7 @@ public:
 
 };
 
-class event_manager : public singleton<event_manager>
+class event_manager final : public singleton<event_manager>
 {
 private:
     std::vector<event_callback> m_callbacks;

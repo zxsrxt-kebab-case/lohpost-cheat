@@ -6,19 +6,21 @@
 #define MODULE_HPP
 
 #include <string>
+#include <utility>
 
 #include "interface_module.hpp"
 
 class module_t : public i_module
 {
-public:
+protected:
     std::string name;
     bool enabled;
 
-    explicit module_t(std::string name) : name(name), enabled(false) {}
+public:
+    explicit module_t(std::string name) : name(std::move(name)), enabled(false) {}
 
-    bool is_enabled() const { return enabled; }
-
+    [[nodiscard]] bool is_enabled() const { return enabled; }
+    bool& get_enabled() { return enabled; }
     void set_enabled(bool enabled)
     {
         this->enabled = enabled;
@@ -27,7 +29,14 @@ public:
         else
             on_disable();
     }
-    std::string get_name() const { return name; }
+    void on_render() override {}
+    void on_menu() override {}
+    void on_tick() override {}
+    void on_disable() override {}
+    void on_enable() override {}
+    void on_event(event_t &event) override {}
+
+    [[nodiscard]] std::string get_name() const { return name; }
 };
 
 

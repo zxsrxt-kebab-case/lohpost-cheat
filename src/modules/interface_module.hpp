@@ -14,6 +14,7 @@ public:
     virtual void on_event(event_t& event) = 0;
     virtual void on_tick() = 0;
     virtual void on_render() = 0;
+    virtual void on_menu() = 0;
     virtual void on_enable() = 0;
     virtual void on_disable() = 0;
 };

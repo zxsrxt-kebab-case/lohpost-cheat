@@ -1,6 +1,7 @@
 #pragma once
-#include "../common.hpp"
 #include "../il2cpp_image/il2cpp_image.hpp"
+
+#define ASSEMBLY "Assembly-CSharp"
 
 class il2cpp_assembly
 {

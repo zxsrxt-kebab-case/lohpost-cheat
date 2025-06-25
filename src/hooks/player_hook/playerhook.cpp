@@ -7,7 +7,7 @@
 #include <iostream>
 #include <ranges>
 
-#include "../../sdk/game/character/newcharactercontroller.hpp"
+#include "../../sdk/game/player_data/player_data.hpp"
 #include "../../ent_system/entsystem.hpp"
 #include "../../event/impl/player_tick_event.hpp"
 #include "../../managers/eventmanager.hpp"
@@ -15,30 +15,19 @@
 #include "../../sdk/il2cpp/il2cpp.hpp"
 #include "../../variables/variables.hpp"
 
-void (*o_player_update)(new_character_controller* controller);
-void player_update(new_character_controller* controller)
+void (*o_player_update)(void* controller);
+void player_update(void* controller)
 {
-    if (module_manager::get()->m_modules["esp"]->is_enabled())
-    {
-        static auto& ent = ent_system::get();
-        if (auto& players = ent->m_controllers;
-            std::ranges::find(players, controller) == players.end() && !controller->identity()->is_local())
-        {
-            players.push_back(controller);
-        }
-        if (controller->identity()->is_local())
-        {
-            ent->m_controller = controller;
-        }
 
-        auto event = player_tick_event(std::string("player_tick"), controller);
-        event_manager::get()->on_event(event);
-    }
+
+    auto event = player_tick_event(std::string("player_tick"));
+    event_manager::get()->on_event(event);
+
     o_player_update(controller);
 }
 
-void player_hook::hook()
+void player_hook::install()
 {
-    il2cpp_assembly::open("Assembly-CSharp")->image()->get_class("Source.Game.Client.Movement", "NewClientCharacterController")->
+    il2cpp_assembly::open("Assembly-CSharp")->image()->get_class("", "PLH")->
     get_method("Update", 0)->hook<&player_update>(&o_player_update);
 }

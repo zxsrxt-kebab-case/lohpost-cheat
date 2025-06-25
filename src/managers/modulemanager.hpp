@@ -5,6 +5,7 @@
 #ifndef MODULEMANAGER_HPP
 #define MODULEMANAGER_HPP
 
+#include <map>
 #include <unordered_map>
 #include <memory>
 
@@ -12,10 +13,26 @@
 #include "../singleton/singleton.hpp"
 
 
-class module_manager : public singleton<module_manager>
+template<typename T>
+concept is_module = requires
 {
+  requires std::is_base_of_v<module_t, T>;
+};
+
+class module_manager final : public singleton<module_manager>
+{
+    std::map<std::string, std::unique_ptr<module_t>> m_modules;
 public:
-    std::unordered_map<std::string, std::unique_ptr<module_t>> m_modules;
+
+    const std::map<std::string, std::unique_ptr<module_t>>& get_modules();
+    module_t* get_module(const std::string& name);
+
+    template<is_module module_type>
+    void add_module(const std::string& name)
+    {
+        m_modules.try_emplace(name, std::make_unique<module_type>(name));
+    }
+
     void initialize();
 };
 

@@ -13,10 +13,11 @@ public:
 	std::string get_namespace( );
 	std::vector<il2cpp_field*> get_fields( );
 	std::vector<il2cpp_method*> get_methods( );
-	il2cpp_field* get_field( std::string name );
+	il2cpp_field* get_field( const std::string& name );
+	il2cpp_field* get_field( std::uint32_t flags, uint32_t index = 0 ); //not works fuck
 	il2cpp_method* get_method( std::string name, int params = 0 );
 	il2cpp_method* get_method( std::string name, std::initializer_list<std::string> params = { } );
-
+	uintptr_t get_static_fields();
 	template<typename T = void*>
 	T new_object( )
 	{

@@ -1,11 +1,16 @@
 #pragma once
 
 #include "../common.hpp"
+#include "../il2cpp_type/il2cpp_type.hpp"
 
 class il2cpp_field
 {
 public:
 	std::string get_name( );
+	il2cpp_type* get_type( );
+	uint32_t get_flags( );
+	int32_t get_offset( );
+
 	template<typename T>
 	T get_static_value( )
 	{
