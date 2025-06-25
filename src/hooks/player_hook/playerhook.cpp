@@ -18,8 +18,6 @@
 void (*o_player_update)(void* controller);
 void player_update(void* controller)
 {
-
-
     auto event = player_tick_event(std::string("player_tick"));
     event_manager::get()->on_event(event);
 
