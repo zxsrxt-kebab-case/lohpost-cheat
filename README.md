@@ -19,4 +19,4 @@
 3. tap inject
 4. enjoy
 
-# P.S. This repository just for proof of my skills in cpp
+# P.S. This repository just for proof of my skills in cpp (outdated xd)
